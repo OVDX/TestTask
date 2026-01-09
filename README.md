@@ -99,6 +99,12 @@ project/
 
 If you encounter any issues:
 
+- if in frontend part turbopack is not working try
+
+```bash
+npx next dev --webpack
+```
+
 - Make sure all dependencies are properly installed
 - Verify that the `.env` file is correctly configured
 - Check that ports 3001 (backend) and the frontend port are not being used by other applications
