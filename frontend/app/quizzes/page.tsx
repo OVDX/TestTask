@@ -22,8 +22,21 @@ export default function QuizzesPage() {
       setLoading(true);
       const data = await quizApi.getAllQuizzes();
       setQuizzes(data);
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to load quizzes");
+    } catch (err: unknown) {
+      if (typeof err === "object" && err !== null && "response" in err) {
+        const axiosErr = err as {
+          response?: {
+            data?: {
+              message?: string;
+            };
+          };
+        };
+        setError(axiosErr.response?.data?.message || "Failed to load quizzes");
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Failed to load quizzes");
+      }
     } finally {
       setLoading(false);
     }
@@ -37,8 +50,21 @@ export default function QuizzesPage() {
       setDeletingId(id);
       await quizApi.deleteQuiz(id);
       setQuizzes(quizzes.filter((quiz) => quiz.id !== id));
-    } catch (err: any) {
-      alert(err.response?.data?.message || "Failed to delete quiz");
+    } catch (err: unknown) {
+      if (typeof err === "object" && err !== null && "response" in err) {
+        const axiosErr = err as {
+          response?: {
+            data?: {
+              message?: string;
+            };
+          };
+        };
+        alert(axiosErr.response?.data?.message || "Failed to delete quiz");
+      } else if (err instanceof Error) {
+        alert(err.message);
+      } else {
+        alert("Failed to delete quiz");
+      }
     } finally {
       setDeletingId(null);
     }

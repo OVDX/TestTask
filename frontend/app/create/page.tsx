@@ -32,7 +32,11 @@ export default function CreateQuizPage() {
     setQuestions(updated);
   };
 
-  const updateQuestion = (index: number, field: keyof Question, value: any) => {
+  const updateQuestion = <K extends keyof Question>(
+    index: number,
+    field: K,
+    value: Question[K]
+  ) => {
     const updated = [...questions];
     updated[index] = { ...updated[index], [field]: value };
 
@@ -123,8 +127,22 @@ export default function CreateQuizPage() {
     try {
       await quizApi.createQuiz({ title, questions });
       router.push("/quizzes");
-    } catch (err: any) {
-      setError(err.response?.data?.message || "Failed to create quiz");
+    } catch (err: unknown) {
+      if (typeof err === "object" && err !== null && "response" in err) {
+        const axiosErr = err as {
+          response?: {
+            data?: {
+              message?: string;
+            };
+          };
+        };
+
+        setError(axiosErr.response?.data?.message || "Failed to create quiz");
+      } else if (err instanceof Error) {
+        setError(err.message);
+      } else {
+        setError("Failed to create quiz");
+      }
     } finally {
       setIsSubmitting(false);
     }

@@ -1,3 +1,5 @@
+"use client";
+
 import { QuizListItem } from "@/lib/api";
 
 interface QuizCardProps {

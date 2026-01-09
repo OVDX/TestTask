@@ -1,10 +1,11 @@
+"use client";
 import { Question } from "@/lib/api";
 
 interface QuestionFormProps {
   question: Question;
   index: number;
   totalQuestions: number;
-  onUpdate: (field: keyof Question, value: any) => void;
+  onUpdate: <K extends keyof Question>(field: K, value: Question[K]) => void;
   onRemove: () => void;
   onAddOption: () => void;
   onUpdateOption: (optionIndex: number, value: string) => void;
