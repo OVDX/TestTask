@@ -30,7 +30,7 @@ export class CreateQuestionDto {
     example: 'true',
   })
   @IsOptional()
-  answer?: any;
+  answer?: boolean | string | string[];
 
   @ApiProperty({ description: 'Order of the question', example: 1 })
   @IsInt()

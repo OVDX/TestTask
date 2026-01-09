@@ -12,6 +12,7 @@ import {
 import { ApiTags, ApiOperation, ApiResponse, ApiParam, ApiBody } from '@nestjs/swagger';
 import { QuizService } from './quiz.service';
 import { CreateQuizDto } from './dto/create-quiz.dto';
+import { QuizEntity, QuizListEntity } from './entities';
 
 @ApiTags('quizzes')
 @Controller('quizzes')
@@ -24,6 +25,7 @@ export class QuizController {
   @ApiResponse({
     status: 201,
     description: 'Quiz created successfully',
+    type: QuizEntity,
   })
   @ApiResponse({ status: 400, description: 'Invalid input' })
   create(@Body(ValidationPipe) createQuizDto: CreateQuizDto) {
@@ -35,6 +37,7 @@ export class QuizController {
   @ApiResponse({
     status: 200,
     description: 'Returns list of all quizzes with title and question count',
+    type: [QuizListEntity],
   })
   findAll() {
     return this.quizService.findAll();
@@ -46,6 +49,7 @@ export class QuizController {
   @ApiResponse({
     status: 200,
     description: 'Returns full quiz details with all questions',
+    type: QuizEntity,
   })
   @ApiResponse({ status: 404, description: 'Quiz not found' })
   findOne(@Param('id') id: string) {
@@ -59,6 +63,12 @@ export class QuizController {
   @ApiResponse({
     status: 200,
     description: 'Quiz deleted successfully',
+    schema: {
+      type: 'object',
+      properties: {
+        message: { type: 'string', example: 'Quiz deleted successfully' },
+      },
+    },
   })
   @ApiResponse({ status: 404, description: 'Quiz not found' })
   remove(@Param('id') id: string) {

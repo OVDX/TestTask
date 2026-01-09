@@ -75,7 +75,7 @@ export class QuizService {
         where: { id },
       });
       return { message: 'Quiz deleted successfully' };
-    } catch (error) {
+    } catch {
       throw new NotFoundException(`Quiz with ID ${id} not found`);
     }
   }
